@@ -147,6 +147,11 @@ function installTerragrunt {
   echo "Successfully moved Terragrunt ${tgVersion}"
 }
 
+function configureGit {
+  git config --global url."https://oauth2:${INPUT_GH_PAT}@github.com/${INPUT_GH_ORG}".insteadOf "https://github.com/"
+}
+
+
 function main {
   # Source the other files to gain access to their functions
   scriptDir=$(dirname ${0})
@@ -163,6 +168,8 @@ function main {
   parseInputs
   configureCLICredentials
   installTerraform
+  configureGit
+
   cd ${GITHUB_WORKSPACE}/${tfWorkingDir}
 
   case "${tfSubcommand}" in
