@@ -33,6 +33,12 @@ inputs:
   tf_actions_fmt_write:
     description: 'Write Terragrunt fmt changes to source files.'
     default: false
+  gh_pat:
+    description: 'GitHub Personal Access Token.'
+    required: true
+  gh_org:
+    description: 'GitHub Organization.'
+    required: true
 outputs:
   tf_actions_output:
     description: 'The Terragrunt outputs in JSON format.'
