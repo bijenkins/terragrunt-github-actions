@@ -148,7 +148,7 @@ function installTerragrunt {
 }
 
 function configureGit {
-  git config --global url."https://oauth2:${INPUT_GH_PAT}@github.com/${INPUT_GH_ORG}".insteadOf "https://github.com/"
+  git config --global url."https://oauth2:${INPUT_GH_PAT}@github.com/${INPUT_GH_ORG}".insteadOf "https://github.com/${INPUT_GH_ORG}"
 }
 
 
