@@ -60,8 +60,6 @@ ${planOutput}
     planPayload=$(echo "${planCommentWrapper}" | jq -R --slurp '{body: .}')
     planCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
     echo "plan: info: commenting on the pull request"
-    cat ${GITHUB_EVENT_PATH}
-    # echo "${planPayload} | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${planCommentsURL}" "
     echo "${planPayload}" | curl -v -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${planCommentsURL}" > /dev/null
   fi
 
