@@ -60,7 +60,14 @@ ${planOutput}
     planPayload=$(echo "${planCommentWrapper}" | jq -R --slurp '{body: .}')
     planCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
     echo "plan: info: commenting on the pull request"
-    echo "${planPayload}" | curl -v -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${planCommentsURL}" > /dev/null
+    # echo "${planPayload}" | curl -v -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${planCommentsURL}" > /dev/null
+    curl -v -L \
+    -X POST \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer ${GITHUB_TOKEN}"\
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    "${planCommentsURL}" \
+    -d "${planPayload}"
   fi
 
   echo ::set-output name=tf_actions_plan_has_changes::${planHasChanges}
@@ -71,5 +78,6 @@ ${planOutput}
   planOutput="${planOutput//$'\r'/'%0D'}"
 
   echo "::set-output name=tf_actions_plan_output::${planOutput}"
+  echo "::set-output name=tf_actions_plan_payload::${planPayload}"
   exit ${planExitCode}
 }
