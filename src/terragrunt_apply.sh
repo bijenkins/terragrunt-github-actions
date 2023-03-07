@@ -40,7 +40,14 @@ ${applyOutput}
     applyPayload=$(echo "${applyCommentWrapper}" | jq -R --slurp '{body: .}')
     applyCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
     echo "apply: info: commenting on the pull request"
-    echo "${applyPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${applyCommentsURL}" > /dev/null
+    # echo "${applyPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${applyCommentsURL}" > /dev/null
+    curl -v -L \
+    -X POST \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer ${GITHUB_TOKEN}"\
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    "${applyCommentsURL}" \
+    -d "${applyPayload}"
   fi
 
   exit ${applyExitCode}
